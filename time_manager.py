@@ -1,4 +1,6 @@
 # This program shows weekly time allocations of tasks
+# time_data.txt is not tracked anymore. To track it back ,
+# use git update-index --no-assume-unchanged time_data.txt
 import time
 
 def read_file(filename):
