@@ -25,6 +25,22 @@ def write_to_file(filename, hdr_line, task_num, duration, lines, len_titles):
     file_object.writelines(L)
     file_object.close()
 
+def reset_all_times(filename, hdr_line, lines):
+    file_object = open(filename, 'w')
+    L = [hdr_line]
+
+    times = list(map(float, lines[1].split()))
+    resetted_times = [x * 0 for x in times]
+
+    new_line = ''
+    for i in resetted_times:
+        new_line = new_line + str(i) + ' '
+    
+    L.append(new_line)
+    
+    file_object.writelines(L)
+    file_object.close()
+
 def show_records(lines, titles):
     count = 0
     times = list(map(float, lines[1].split()))
@@ -54,7 +70,8 @@ if __name__ == "__main__":
     for i in range(len(titles)):
         print(i, "-", titles[i])
     print(i + 1, "- Just show me the current records!")
-    print(i + 2, "- Instead, add a duration manually!\n")
+    print(i + 2, "- Instead, add a duration manually!")
+    print(i + 3, "- RESET\n")
     task_num = int(input("Enter task number: "))
 
     if task_num == len(titles):
@@ -68,6 +85,10 @@ if __name__ == "__main__":
         write_to_file(filename, hdr_line, task_num, time_lapsed, lines, len(titles))
 
         show_updated_records(filename, lines)
+
+    elif task_num == len(titles) + 2:
+        reset_all_times(filename, hdr_line, lines)
+        print("Resetting completed, have a nice week!")
         
     else:
         # Start recording (STOPWATCH)
