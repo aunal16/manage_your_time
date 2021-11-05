@@ -13,13 +13,18 @@ def read_file(filename):
     
     return lines
 
-def write_to_file(filename, hdr_line, task_num, duration, lines, len_titles):
+def write_to_file(filename, hdr_line, task_num, duration, len_titles):
+    lines = read_file(filename)
+    
     file_object = open(filename, 'w')
     L = [hdr_line]
 
     times = list(map(float, lines[1].split()))
     additions = [0] * len_titles
-    additions[task_num] = duration / 60 # we mostly work in minutes   
+    additions[task_num] = duration / 60 # we mostly work in minutes
+
+    print(times)
+    print(additions)
 
     new_times = [x + y for x, y in zip(times, additions)]
 
@@ -29,6 +34,7 @@ def write_to_file(filename, hdr_line, task_num, duration, lines, len_titles):
     L.append(new_line)
     
     file_object.writelines(L)
+    print(L)
     file_object.close()
 
 def reset_all_times(filename, hdr_line, lines):
@@ -47,12 +53,6 @@ def reset_all_times(filename, hdr_line, lines):
     file_object.writelines(L)
     file_object.close()
 
-def show_records(lines, titles):
-    count = 0
-    times = list(map(float, lines[1].split()))
-    for i in range(len(titles)):
-        print("%s\t: %5.2f hrs\t<->\t%7.2f min" % (titles[i], times[i]/60, times[i]))
-
 def choose_task(titles):
     print("Choose a task:\n")
     for i in range(len(titles)):
@@ -64,13 +64,19 @@ def choose_task(titles):
 
     return task_num
 
-def show_updated_records(filename, lines):
+def show_updated_records(filename):
     print()
     lines = read_file(filename)
     hdr_line = lines[0]
     titles = hdr_line.split()
     titles[-1] = (titles[-1].split())[0]
     show_records(lines, titles)
+
+def show_records(lines, titles):
+    count = 0
+    times = list(map(float, lines[1].split()))
+    for i in range(len(titles)):
+        print("%s\t: %5.2f hrs\t<->\t%7.2f min" % (titles[i], times[i]/60, times[i]))
 
 if __name__ == "__main__":
     # This is the file where task names and time data is stored.
@@ -97,9 +103,9 @@ if __name__ == "__main__":
             time_lapsed = float(input("Enter duration in minutes: "))
             # convert minute to seconds
             time_lapsed *= 60 
-            write_to_file(filename, hdr_line, task_num, time_lapsed, lines, len(titles))
+            write_to_file(filename, hdr_line, task_num, time_lapsed, len(titles))
 
-            show_updated_records(filename, lines)
+            show_updated_records(filename)
 
         elif task_num == len(titles) + 2:
             reset_all_times(filename, hdr_line, lines)
@@ -107,7 +113,6 @@ if __name__ == "__main__":
             
         else:
             # Start recording (STOPWATCH)
-            # Stopwatch
             start_time = time.time()
             input("Press Enter to stop stopwatch")
             end_time = time.time()
@@ -117,9 +122,9 @@ if __name__ == "__main__":
             print(time_lapsed, "in seconds")
             print(time_lapsed/60, "in minutes")
 
-            write_to_file(filename, hdr_line, task_num, time_lapsed, lines, len(titles))
+            write_to_file(filename, hdr_line, task_num, time_lapsed, len(titles))
 
-            show_updated_records(filename, lines)
+            show_updated_records(filename)
 
         check = input("\nDo you want to do another task? (type y for yes): ")
         if check == 'y':
