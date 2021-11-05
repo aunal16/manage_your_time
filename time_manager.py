@@ -22,10 +22,6 @@ def write_to_file(filename, hdr_line, task_num, duration, len_titles):
     times = list(map(float, lines[1].split()))
     additions = [0] * len_titles
     additions[task_num] = duration / 60 # we mostly work in minutes
-
-    print(times)
-    print(additions)
-
     new_times = [x + y for x, y in zip(times, additions)]
 
     new_line = ''
@@ -34,7 +30,6 @@ def write_to_file(filename, hdr_line, task_num, duration, len_titles):
     L.append(new_line)
     
     file_object.writelines(L)
-    print(L)
     file_object.close()
 
 def reset_all_times(filename, hdr_line, lines):
