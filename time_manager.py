@@ -4,9 +4,13 @@
 import time
 
 def read_file(filename):
-    with open(filename) as f:
-        lines = f.readlines()
+    file_object = open(filename, 'r')
+    lines       = list()
 
+    for line in file_object:
+        lines.append(line)
+    file_object.close()
+    
     return lines
 
 def write_to_file(filename, hdr_line, task_num, duration, lines, len_titles):
@@ -85,6 +89,7 @@ if __name__ == "__main__":
     repeat = True
     while repeat:
         if task_num == len(titles):
+            lines = read_file(filename)
             show_records(lines, titles)
             
         elif task_num == len(titles) + 1:
